@@ -197,6 +197,18 @@ static void serialize32(uint32_t a)
     serialize16((uint16_t)(a >> 16));
 }
 
+static void serializeFloat32(float a)
+{
+    // Cast IEEE 754 float, to four unsigned bytes
+    // for serialization.
+    union { uint8_t b[4]; float f; } u;
+    u.f = a;
+    serialize8(u.b[3]);
+    serialize8(u.b[2]);
+    serialize8(u.b[1]);
+    serialize8(u.b[0]);
+}
+
 static uint8_t read8(void)
 {
     return currentPort->inBuf[currentPort->indRX++] & 0xff;
@@ -1193,6 +1205,15 @@ static bool processOutCommand(uint8_t cmdMSP)
         serialize8(masterConfig.sensorAlignmentConfig.gyro_align);
         serialize8(masterConfig.sensorAlignmentConfig.acc_align);
         serialize8(masterConfig.sensorAlignmentConfig.mag_align);
+        break;
+    case MSP_GET_MIXER_CONFIG:
+        headSerialReply(MAX_SUPPORTED_MOTORS * 4 * 4);
+        for (i = 0; i < MAX_SUPPORTED_MOTORS; i++) {
+            serializeFloat32(currentMixer[i].throttle);
+            serializeFloat32(currentMixer[i].roll);
+            serializeFloat32(currentMixer[i].pitch);
+            serializeFloat32(currentMixer[i].yaw);
+        }
         break;
 
     default:

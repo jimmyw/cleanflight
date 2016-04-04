@@ -70,7 +70,7 @@ static airplaneConfig_t *airplaneConfig;
 static rxConfig_t *rxConfig;
 
 static mixerMode_e currentMixerMode;
-static motorMixer_t currentMixer[MAX_SUPPORTED_MOTORS];
+motorMixer_t currentMixer[MAX_SUPPORTED_MOTORS];
 
 #ifdef USE_SERVOS
 static uint8_t servoRuleCount = 0;

@@ -199,6 +199,7 @@ void filterServos(void);
 
 extern int16_t motor[MAX_SUPPORTED_MOTORS];
 extern int16_t motor_disarmed[MAX_SUPPORTED_MOTORS];
+extern motorMixer_t currentMixer[MAX_SUPPORTED_MOTORS];
 
 extern bool motorLimitReached;
 
